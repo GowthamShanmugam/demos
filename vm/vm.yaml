@@ -2,6 +2,7 @@ apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
   name: vmtest
+  namespace: appset-vm
 spec:
   dataVolumeTemplates:
     - metadata:
@@ -21,7 +22,7 @@ spec:
     - metadata:
         labels:
           appName: vmtest
-        name: dv-vmtest-red-muskox-68
+        name: dv-vmtest-brown-piranha-29
       spec:
         source:
           blank: {}
@@ -47,7 +48,7 @@ spec:
           disks:
             - disk:
                 bus: virtio
-              name: pcv-1
+              name: disk-turquoise-giraffe-14
           interfaces:
             - masquerade: {}
               name: default
@@ -64,9 +65,9 @@ spec:
               #cloud-config
               chpasswd:
                 expire: false
-              password: 3qcw-upgi-5fd5
+              password: mzbf-sjha-hee2
               user: rhel
           name: cloudinitdisk
         - dataVolume:
-            name: dv-vmtest-red-muskox-68
-          name: pcv-1
+            name: dv-vmtest-brown-piranha-29
+          name: disk-turquoise-giraffe-14

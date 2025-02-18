@@ -5,6 +5,8 @@ metadata:
 spec:
   dataVolumeTemplates:
     - metadata:
+        labels:
+          appName: vmtest
         name: vmtest-volume
       spec:
         sourceRef:
