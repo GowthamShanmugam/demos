@@ -1,0 +1,72 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vmtest
+spec:
+  dataVolumeTemplates:
+    - metadata:
+        labels:
+          appName: vmtest
+        name: vmtest-volume
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: rhel8
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+          storageClassName: ocs-storagecluster-ceph-rbd
+    - metadata:
+        labels:
+          appName: vmtest
+        name: dv-vmtest-red-muskox-68
+      spec:
+        source:
+          blank: {}
+        storage:
+          resources:
+            requests:
+              storage: 1Mi
+          storageClassName: ocs-storagecluster-ceph-rbd
+        preallocation: true
+  instancetype:
+    name: u1.medium
+  preference:
+    name: rhel.8
+  running: true
+  template:
+    metadata:
+      labels:
+        network.kubevirt.io/headlessService: headless
+    spec:
+      domain:
+        devices:
+          autoattachPodInterface: false
+          disks:
+            - disk:
+                bus: virtio
+              name: pcv-1
+          interfaces:
+            - masquerade: {}
+              name: default
+      networks:
+        - name: default
+          pod: {}
+      subdomain: headless
+      volumes:
+        - dataVolume:
+            name: vmtest-volume
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |
+              #cloud-config
+              chpasswd:
+                expire: false
+              password: 3qcw-upgi-5fd5
+              user: rhel
+          name: cloudinitdisk
+        - dataVolume:
+            name: dv-vmtest-red-muskox-68
+          name: pcv-1
